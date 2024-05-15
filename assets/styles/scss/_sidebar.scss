@@ -1,0 +1,53 @@
+@import "variable";
+.menu-item {
+  // -webkit-text-stroke-width: thin;
+  color: $text-base;
+
+  &:hover,
+  &.active {
+    color: $green_100 !important;
+
+    .menu-icon {
+      background-color: $green_50;
+    }
+  }
+}
+.v-list-item__spacer {
+  width: 10px !important;
+}
+
+.sidebar-item {
+  // padding-right: 10px !important;
+  color: $text-base;
+  min-height: 35px !important;
+  font-size: 10px !important;
+  font-weight: 300 !important;
+  &:hover,
+  &.active {
+    color: $green_100 !important;
+    background-color: $green_50 !important;
+    border-radius: 10px !important;
+    &::before {
+      content: "";
+      position: absolute;
+      right: 4px;
+      top: 8px;
+      bottom: 8px;
+      width: 4px;
+      border-radius: 8px;
+      background-color: $green_100;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard-appbar {
+    width: calc(100% - 220px) !important;
+  }
+  .main-appbar {
+    width: calc(100% - 312px) !important;
+  }
+  .expandedSidebar {
+    width: calc(100% - 52px) !important;
+  }
+}
