@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
-
+import io from 'socket.io-client'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     "vuetify/lib/styles/main.sass",
     "@mdi/font/css/materialdesignicons.min.css",
   ],
-  plugins: [{ src: "~/plugins/vuetify.js" }],
+  plugins: [{ src: "~/plugins/vuetify.js" }, "@/plugins/nuxt-socket-io"],
   routeRules: {
     "/faq": { ssr: true },
     // Generated at build time for SEO purpose
@@ -28,12 +28,27 @@ export default defineNuxtConfig({
   },
   modules: [
     (_options, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) => {
+      nuxt.hooks.hook("vite:extendConfig", (config) => {
         // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }))
-      })
+        config.plugins.push(vuetify({ autoImport: true }));
+      });
     },
+    "nuxt-socket-io",
+    
   ],
+
+  // io: {
+  //   sockets: [
+  //     // Required
+  //     {
+  //       // At least one entry is required
+  //       name: "main",
+  //       url: "wss://wsg.ok-ex.io/ws",
+  //       default: true,
+  //     },
+  //   ],
+  // },
+
   vite: {
     vue: {
       template: {
@@ -48,5 +63,3 @@ export default defineNuxtConfig({
     },
   },
 });
-
-

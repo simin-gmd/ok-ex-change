@@ -27,7 +27,6 @@
 <script setup>
 
 const { fetchTickersList } = useApi()
-
 const loading = ref(true);
 const orderedData = ref([]);
 
@@ -63,10 +62,48 @@ if (tickersList.data.value.code == '100') {
     loading.value = false;
 }
 
-// onMounted(() => {
 function percentage(x, y) {
     const change = y - x;
     return Number((change / x) * 100).toFixed(3)
 }
-// })
+
+
+import io from 'socket.io-client'
+const socket = ref(null)
+const data = ref({})
+onMounted(() => {
+    socket.value = io('wss://wsg.ok-ex.io/ws',
+    { transports: ['websocket'] })
+    // console.log(socket.value.on);
+
+    socket.value.on('connect', () => {
+        console.log('Connected WebSocket ')
+        getTickerUpdate()
+    })
+    socket.value.on('disconnect', () => {
+        console.log('Disconnected WebSocket ')
+    })
+
+
+    // Handle response from server
+  socket.value.on('get_ticker_update', (response) => {
+    data.value = response.data
+    console.log('Received data:', response.data)
+  })
+})
+onBeforeUnmount(() => {
+    if (socket.value) {
+        socket.value.disconnect()
+    }
+})
+
+async function getTickerUpdate() {
+    try {
+        const response = await axios.get(fetchTickersList.url)
+        console.log(response , "okijhgf");
+        // socket.value.emit('get_ticker_update', { data: response.data })
+    } catch (error) {
+        console.error('Error fetching data from API:', error)
+    }
+}
 </script>
