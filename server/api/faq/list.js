@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   // }
   try {
     const response = await axios.get(
-      `${API_URL}/oapi/v1/market/tickers`
+      `${API_URL}/server/api/support/faq`
       // ,
       // {
       //   headers: {

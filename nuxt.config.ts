@@ -11,12 +11,12 @@ export default defineNuxtConfig({
     "@mdi/font/css/materialdesignicons.min.css",
   ],
   plugins: [{ src: "~/plugins/vuetify.js" }],
-  // routeRules: {
-    // "/**": { ssr: false },
+  routeRules: {
+    "/faq": { ssr: true },
     // Generated at build time for SEO purpose
     // Cached for 1 hour
-    // "/api/*": { cache: { maxAge: 60 * 60 }, cors: false },
-  // },
+    "/api/*": { cache: { maxAge: 60 * 60 }, cors: false },
+  },
   build: {
     transpile: ["vuetify"],
   },

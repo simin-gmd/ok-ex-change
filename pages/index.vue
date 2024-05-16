@@ -7,15 +7,13 @@
                         <v-data-table :loading="loading" loading-text="لطفا صبر کنید!..."
                             no-data-text="داداه ای موجود نیست" fixed-header :search="search" :items="orderedData"
                             :headers="headers">
-                            <!-- <template v-slot:item.status="{ item }">
+                            <template v-slot:item.change24H="{ item }">
                                 <div class="text-center">
-                                    <v-chip :color="item.status == 'فعال' ? 'green' : 'red'" :text="item.status"
-                                        class="text-uppercase w-full" label size="small"></v-chip>
+                                    <v-chip dir="ltr" :color="item.change24H > 0 ? 'green' : 'red'"
+                                        :text="item.change24H + '%'" class="text-uppercase " label
+                                        size="small"></v-chip>
                                 </div>
-                            </template> -->
-
-
-
+                            </template>
                             <template v-slot:bottom>
                                 <div class="text-center pt-2"></div>
                             </template>
@@ -27,42 +25,48 @@
     </v-container>
 </template>
 <script setup>
+
+const { fetchTickersList } = useApi()
+
 const loading = ref(true);
 const orderedData = ref([]);
-const search = ref("");
-const tickersList = useAsyncData("tickersList", () =>
-    $fetch(`/api/tickers/list`)
-);
+
+
 const studentSearch = useState("search", () => "");
 const handleSearchItems = (value) => {
     studentSearch.value = value;
 };
 const headers = [
-    // { title: "", align: "center", key: "gradeTitle" },
-    // { title: "وضعیت", align: "center", key: "status" },
     { title: "قیمت", align: "center", key: "price" },
     { title: "تغییر 24 ساعته", align: "center", key: "change24H" },
-    { title: "جفت", align: "center", key: "title" },
+    { title: "جفت ارز", align: "center", key: "title" },
 ];
 function createRows(item) {
+    const str = item.symbol;
+    const parts = str.split("-");
+    const firstPart = parts[0];
+    const secondPart = parts[1];
     return {
-        // id: item.id,
-        title: item.symbol,
-        // image:item.image,
-        // gradeTitle: gradeList.data.value.data.data.find((i) => i.id == item.grade_id).title,
-        change24H: item.open_24h,
-        price: item.last,
+        title: firstPart,
+        change24H: percentage(item.open_24h, item.last),
+        price: secondPart + " " + item.last,
     };
 }
 
-watch(tickersList.data, async () => {
-    if (tickersList.data.value.code == '100') {
-        orderedData.value = tickersList.data.value.tickers.map((i) => createRows(i));
-        
-        console.log(orderedData.value, "bjfvbjbjfvbj");
-        loading.value = false;
-    } else {
-        loading.value = false;
-    }
-})
+const tickersList = await useAsyncData("tickersList", () =>
+    $fetch(fetchTickersList.url)
+);
+if (tickersList.data.value.code == '100') {
+    orderedData.value = tickersList.data.value.tickers.map((i) => createRows(i));
+    loading.value = false;
+} else {
+    loading.value = false;
+}
+
+// onMounted(() => {
+function percentage(x, y) {
+    const change = y - x;
+    return Number((change / x) * 100).toFixed(3)
+}
+// })
 </script>

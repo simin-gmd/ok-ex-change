@@ -1,9 +1,9 @@
 <template>
   <div class="relative col-4">
+  {{ filteredItems }}
     <div>
-      <!-- @change="($event) => emit('change', $event.target.value)" -->
-      <input type="text" name="search" id="searchTable" class="datatable-search w-full placeholder:!text-sm"
-        placeholder="جستجو..."  />
+      <input type="text" name="search" v-model="searchText" id="searchTable"
+        class="datatable-search w-full placeholder:!text-sm" placeholder="جستجو..." />
       <label for="searchTable" class="absolute left-0 top-0 w-full h-full flex justify-end items-center !text-sm">
         <div class="border-r px-2 text-muted">
           <v-icon class="">mdi-magnify</v-icon>
@@ -13,35 +13,47 @@
     </div>
   </div>
   <div>
-    <div class="text-subtitle-2 mb-2">Default</div>
-    <v-expansion-panels>
-      <v-expansion-panel v-for="i in 3" :key="i"
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        title="Item"></v-expansion-panel>
-    </v-expansion-panels>
+    <div class="flex flex-col" v-for="faqCategory in categories" :key="faqCategory._id" :id="faqCategory._id">
+      <div class="flex gap-4 pt-8 pb-2 items-center">
+        <img src="/okex.svg" class="w-8 h-8" alt="">
+        <h2 class="font-semibold ">{{ faqCategory.category }}</h2>
+      </div>
 
-    <div class="text-subtitle-2 mt-4 mb-2">Accordion</div>
+      <div class="flex flex-col" v-for="categoryChild in faqCategory.children" :key="categoryChild._id"
+        :id="categoryChild._id">
+        <h3 class="font-semibold py-6">{{ categoryChild.category }}</h3>
+        <v-expansion-panels>
+          <v-expansion-panel v-for="faq in categoryChild.rows" :key="faq._id" :id="faq_id" :text="faq.answer"
+            :title="faq.question"></v-expansion-panel>
+        </v-expansion-panels>
+      </div>
 
-    <v-expansion-panels variant="accordion">
-      <v-expansion-panel v-for="i in 3" :key="i"
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        title="Item"></v-expansion-panel>
-    </v-expansion-panels>
+    </div>
 
-    <div class="text-subtitle-2 mt-4 mb-2">Inset</div>
 
-    <v-expansion-panels class="my-4" variant="inset">
-      <v-expansion-panel v-for="i in 3" :key="i"
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        title="Item"></v-expansion-panel>
-    </v-expansion-panels>
-
-    <div class="text-subtitle-2 mt-4 mb-2">Popout</div>
-
-    <v-expansion-panels class="my-4" variant="popout">
-      <v-expansion-panel v-for="i in 3" :key="i"
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        title="Item"></v-expansion-panel>
-    </v-expansion-panels>
   </div>
 </template>
+<script setup>
+const searchText = ref('')
+const { fetchFAQList } = useApi()
+
+const categories = ref([])
+const faqList = await useAsyncData("faqList", () =>
+  $fetch(fetchFAQList.url)
+);
+categories.value = faqList.data.value.data
+
+// console.log(searchText.value);
+watch(searchText, () => {
+  console.log(searchText.value);
+  const filteredItems = computed(() => {
+    return faqList.data.value.data.filter(item =>
+      item.category.includes(searchText.value)
+    )
+  })
+  console.log(filteredItems.value,"jhvg")
+  categories.value = filteredItems.value
+  
+})
+
+</script>
