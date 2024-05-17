@@ -13,7 +13,7 @@
     </div>
   </div>
   <div>
-    <div class="flex flex-col" v-for="faqCategory in categories" :key="faqCategory._id" :id="faqCategory._id">
+    <div v-if="categories.length > 0" class="flex flex-col" v-for="faqCategory in categories" :key="faqCategory._id" :id="faqCategory._id">
       <div class="flex gap-4 pt-8 pb-2 items-center">
         <img src="/okex.svg" class="w-8 h-8" alt="">
         <h2 class="font-semibold ">{{ faqCategory.category }}</h2>
@@ -29,7 +29,9 @@
       </div>
 
     </div>
-
+<div v-else>
+داده ای وجود ندارد
+</div>
 
   </div>
 </template>

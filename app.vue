@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-app mx-auto">
     <v-app>
       <v-locale-provider rtl>
         <KeepAlive>
@@ -47,4 +47,15 @@ definePageMeta({
   opacity: 0;
   filter: blur(1rem);
 }
+
+
+.my-app{
+  max-width: 100%;
+}
+@media only screen and (min-width: 1520px) {
+  .my-app{
+    max-width: 1520px;
+  }
+}
+
 </style>

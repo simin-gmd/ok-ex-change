@@ -1,7 +1,7 @@
 <template>
   <v-card flat class="space-y-2 !border-0">
     <v-card-title
-      class="d-flex justify-between align-center items-center !p-0 px-5"
+      class="d-flex justify-between align-center items-center !p-0 px-0 lg:px-5"
     >
       <v-icon v-if="icon" :icon="icon"></v-icon>
       <span v-if="title" class="text-base font-semibold title-text">
@@ -31,7 +31,7 @@
     </v-card-title>
 
     <!-- <tbody> -->
-    <div class="p-5">
+    <div class="p-0 lg:p-5">
       <slot name="table" />
     </div>
   </v-card>

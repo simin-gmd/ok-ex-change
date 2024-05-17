@@ -2,7 +2,7 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import io from 'socket.io-client'
 
-export default defineNuxtConfig({
+export default ({
   devtools: { enabled: true },
   css: [
     "~/assets/styles/scss/main.scss",
@@ -27,12 +27,12 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
-      });
-    },
+    // (_options, nuxt) => {
+    //   nuxt.hooks.hook("vite:extendConfig", (config) => {
+    //     // @ts-expect-error
+    //     config.plugins.push(vuetify({ autoImport: true }));
+    //   });
+    // },
     "nuxt-socket-io",
     
   ],
@@ -48,7 +48,17 @@ export default defineNuxtConfig({
   //     },
   //   ],
   // },
-
+  
+  socketio: {
+    server: {
+      path: '/io'
+    },
+    client: {
+      namespace: 'wss://wsg.ok-ex.io/ws',
+      autoConnect: true
+    }
+  },
+  
   vite: {
     vue: {
       template: {

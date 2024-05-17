@@ -77,6 +77,11 @@ function toggleSidebar() {
 <style>
 .toggleSidebar-icon {
     position: relative;
+}
 
+@media only screen and (max-width: 500px) {
+    .toggleSidebar-icon {
+    position: baseline;
+}
 }
 </style>
