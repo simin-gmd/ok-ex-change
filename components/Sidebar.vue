@@ -24,6 +24,7 @@
   </div>
 </template>
 <script setup>
+// sidebar items
 let lists = [
   {
     title: "جوایز",

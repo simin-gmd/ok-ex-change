@@ -1,3 +1,4 @@
+<!-- data table component -->
 <template>
   <v-card flat class="space-y-2 !border-0">
     <v-card-title

@@ -1,3 +1,4 @@
+<!-- create card section component -->
 <template>
     <section class=" w-full py-3 px-5 flex justify-center items-center  flex-col">
 

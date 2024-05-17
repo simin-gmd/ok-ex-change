@@ -15,13 +15,13 @@ io.on("connection", (socket) => {
   console.log("A user connected");
 
   socket.on("get_ticker_update", async () => {
-    // بازیابی داده‌های بروزرسانی شده از API
+    // update data
     const updatedData = {
       response: await axios.get(`${API_URL}/oapi/v1/market/tickers`),
     };
 
     console.log(updatedData , "updatedData");
-    // ارسال داده‌ها به کلاینت
+    // send data to client
     socket.emit("get_ticker_update", updatedData);
   });
 

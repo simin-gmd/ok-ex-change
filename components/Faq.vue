@@ -12,6 +12,7 @@
 
     </div>
   </div>
+  <!-- if have faq categury show them -->
   <div>
     <div v-if="categories.length > 0" class="flex flex-col" v-for="faqCategory in categories" :key="faqCategory._id" :id="faqCategory._id">
       <div class="flex gap-4 pt-8 pb-2 items-center">
@@ -29,6 +30,7 @@
       </div>
 
     </div>
+    <!-- if havent faq categury -->
 <div v-else>
 داده ای وجود ندارد
 </div>
@@ -36,26 +38,25 @@
   </div>
 </template>
 <script setup>
+//  initial data
 const searchText = ref('')
+const categories = ref([])
+
 const { fetchFAQList } = useApi()
 
-const categories = ref([])
+// get faq list
 const faqList = await useAsyncData("faqList", () =>
   $fetch(fetchFAQList.url)
 );
 categories.value = faqList.data.value.data
 
-// console.log(searchText.value);
+// handel searche faq categury name
 watch(searchText, () => {
-  console.log(searchText.value);
   const filteredItems = computed(() => {
     return faqList.data.value.data.filter(item =>
       item.category.includes(searchText.value)
     )
   })
-  console.log(filteredItems.value,"jhvg")
   categories.value = filteredItems.value
-  
 })
-
 </script>
